@@ -1,6 +1,59 @@
 version: '2'
 services:
   app:
-    build: .
+    image: sm-shop:latest 
     ports:
-     - "80:8080"
+     - "8080:8080"
+    depends_on:
+      - db   
+      
+      
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_USER=user
+      - DATABASE_NAME=SALESMANAGER
+      - DATABASE_PORT=3306        
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'SALESMANAGER'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      # <Port exposed> : < MySQL Port running inside container>
+      - '3306:3306'
+    expose:
+      # Opens port 3306 on the container
+      - '3306'  
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.5.3
+    restart: always
+    network_mode: host
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    environment:
+      - discovery.type=single-node
+      - cluster.name=jgBay-cluster
+      - bootstrap.memory_lock=true
+      - "xpack.security.enabled=false"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:5.5.3
+    restart: always
+    network_mode: host
+    ports:
+      - "5601:5601"
+    environment:
+      ELASTICSEARCH_URL: http://localhost:9200
+
+
+volumes:
+  esdata:
+    driver: local     
