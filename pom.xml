@@ -48,7 +48,7 @@
 
     <org.elasticsearch-version>6.3.1</org.elasticsearch-version>
     <io.searchbox.jest-version>6.3.1</io.searchbox.jest-version>
-    <guava.version>27.1-jre</guava.version>
+    <guava.version>29.0-jre</guava.version>
     <commons-lang.version>3.5</commons-lang.version>
     <commons-io.version>2.5</commons-io.version>
     <commons-collections4.version>4.0</commons-collections4.version>
